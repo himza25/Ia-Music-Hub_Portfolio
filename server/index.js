@@ -9,25 +9,24 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Configuration CORS
-const corsOptions = {
-  origin: '*', // Permettre toutes les origines pour le développement
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
+app.use(cors());  // Ajoutez cette ligne pour autoriser les requêtes CORS
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect(uri, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true, 
   tls: true,
   tlsAllowInvalidCertificates: true,
-}).then(() => {
+});
+const connection = mongoose.connection;
+connection.once('open', () => {
   console.log('MongoDB database connection established successfully');
-}).catch((error) => {
-  console.error('MongoDB connection error:', error);
+});
+
+// Route de test pour vérifier la connectivité du backend
+app.get('/test-backend', (req, res) => {
+  res.send('Backend connection successful');
 });
 
 app.use('/users', usersRouter);

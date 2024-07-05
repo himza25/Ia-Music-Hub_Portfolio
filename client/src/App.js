@@ -6,6 +6,7 @@ import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import PreviewPage from './pages/PreviewPage';
 import CreatePage from './pages/CreatePage';
+import TestBackend from './components/TestBackend'; // Import du nouveau composant
 import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
@@ -39,6 +40,7 @@ const App = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/preview" element={<PreviewPage />} />
+          <Route path="/test-backend" element={<TestBackend />} /> {/* Nouvelle route */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </main>
