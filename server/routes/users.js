@@ -1,46 +1,53 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
 // Inscription
 router.post('/signup', async (req, res) => {
-    console.log('Request body:', req.body); // Ajoutez cette ligne pour voir les données reçues
-    try {
-        const { email, password } = req.body;
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'L\'utilisateur existe déjà.' });
-        }
+  try {
+    const { email, username, password } = req.body;
+    console.log('Signup request received', { email, username, password });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ email, password: hashedPassword });
-        await newUser.save();
-
-        return res.status(201).json({ message: 'Inscription réussie !' });
-    } catch (error) {
-        console.error(error); // Ajouter ce console.log pour voir les erreurs côté serveur
-        return res.status(500).json({ message: 'Erreur serveur.' });
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      console.log('User already exists');
+      return res.status(400).json({ message: 'L\'utilisateur existe déjà.' });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ email, username, password: hashedPassword });
+    await newUser.save();
+
+    console.log('User created successfully');
+    return res.status(201).json({ message: 'Inscription réussie !' });
+  } catch (error) {
+    console.error('Erreur lors de l\'inscription', error);
+    return res.status(500).json({ message: 'Erreur serveur.' });
+  }
 });
 
 // Connexion
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('Login request received', { email, password });
+
     const user = await User.findOne({ email });
     if (!user) {
+      console.log('Invalid email or password');
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      console.log('Invalid email or password');
       return res.status(400).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
-    const token = jwt.sign({ userId: user._id }, 'your_jwt_secret', { expiresIn: '1h' });
-    return res.status(200).json({ token, user });
+    console.log('User logged in successfully');
+    return res.status(200).json({ message: 'Connexion réussie !', user });
   } catch (error) {
+    console.error('Erreur lors de la connexion', error);
     return res.status(500).json({ message: 'Erreur serveur.' });
   }
 });

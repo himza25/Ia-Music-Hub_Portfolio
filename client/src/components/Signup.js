@@ -5,12 +5,13 @@ import { useNavigate } from 'react-router-dom';
 const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/users/signup', { email, password });
+      await axios.post('https://musical-guide-577xxwq64g9fvxwv-5000.app.github.dev/users/signup', { email, password, username });
       alert('Inscription réussie !');
       navigate('/auth');
     } catch (error) {
@@ -28,6 +29,13 @@ const Signup = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full border p-2 mb-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Nom d'utilisateur"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           className="w-full border p-2 mb-2 rounded"
         />
         <input

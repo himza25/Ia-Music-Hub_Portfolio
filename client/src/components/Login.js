@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/users/login', { email, password });
+      const response = await axios.post('https://musical-guide-577xxwq64g9fvxwv-5000.app.github.dev/users/login', { email, password });
       login(response.data.user);
       navigate('/profile');
     } catch (error) {
