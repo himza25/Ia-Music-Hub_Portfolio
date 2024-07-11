@@ -1,25 +1,43 @@
-
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const CreatePage = () => {
   const [title, setTitle] = useState('');
   const [youtubeLink, setYoutubeLink] = useState('');
-  const { currentUser } = useAuth();
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Ajoute ici la logique d'ajout de création (par exemple, appel API)
-      console.log('Création ajoutée:', { title, youtubeLink, user: currentUser });
+      const creationData = {
+        userId: user._id,
+        title,
+        description: 'No description provided',
+        link: youtubeLink,
+      };
+      const res = await axios.post('https://musical-guide-577xxwq64g9fvxwv-5000.app.github.dev/creations/add', creationData);
+      setSuccess('Création ajoutée avec succès !');
+      setError('');  // Clear error message
+      setTitle('');
+      setYoutubeLink('');
+      navigate('/profile'); // Redirect to profile page to see the new creation
     } catch (error) {
-      console.error('Erreur lors de l\'ajout de la création', error);
+      setError('Erreur lors de l\'ajout de la création.');
+      setSuccess('');  // Clear success message
+      console.error(error);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">Ajouter une Création</h1>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
+      {success && <div className="text-green-500 mb-4">{success}</div>}
       <form onSubmit={handleSubmit} className="bg-white p-4 rounded shadow w-1/3">
         <input
           type="text"
