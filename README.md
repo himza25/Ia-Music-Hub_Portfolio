@@ -127,22 +127,6 @@ npm start
 * View and manage your tracks on the "Profile" page.
 * Promote your tracks by sharing them on social media.
 
-## Current Status
-
-Completed:
-* Design and wireframes
-* Backend development
-* Frontend development for basic functionality
-
-In Progress:
-* Integration of promotion tools
-* Testing and validation
-* Finalizing user interface and experience
-
-Next Steps:
-* Complete the integration with social media and YouTube.
-* Perform thorough testing and validation.
-* Prepare for the deployment and launch of the platform.
 
 ## Contributing
 
@@ -154,9 +138,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/YourFeature`).
 5. Open a pull request.
 
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
 
