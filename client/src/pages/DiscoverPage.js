@@ -1,18 +1,25 @@
+
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const DiscoverPage = () => (
-  <div>
-    <input type="text" placeholder="Rechercher des créations" className="w-full border p-2 mb-4 rounded" />
-    <div className="grid grid-cols-3 gap-4">
-      {[1, 2, 3, 4, 5, 6].map(i => (
-        <div key={i} className="bg-white p-4 rounded shadow">
-          <div className="bg-gray-200 h-48 mb-2"></div>
-          <h3 className="font-bold">Création {i}</h3>
-          <p>Description de la création</p>
-        </div>
-      ))}
+const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleStartAdventure = () => {
+    navigate('/auth');
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-4">Bienvenue sur IA Music Hub</h1>
+      <button
+        className="bg-blue-500 text-white px-6 py-3 rounded"
+        onClick={handleStartAdventure}
+      >
+        Commencer l'aventure
+      </button>
     </div>
-  </div>
-);
+  );
+};
 
-export default DiscoverPage;
+export default HomePage;

@@ -1,35 +1,44 @@
 import React from 'react';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { Home, User, Share2 } from 'lucide-react';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
 import ProfilePage from './pages/ProfilePage';
 import PreviewPage from './pages/PreviewPage';
 import CreatePage from './pages/CreatePage';
-import TestBackend from './components/TestBackend'; // Importer le nouveau composant
+import TestBackend from './components/TestBackend';
 import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
-  const { currentUser } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth');
+  };
 
   return (
     <div className="flex min-h-screen">
       <nav className="w-64 bg-gray-800 text-white p-4">
         <div className="text-xl font-bold mb-8">IA Music Hub</div>
-        <div className="flex items-center p-2 cursor-pointer" onClick={() => window.location.href = '/'}>
+        <div className="flex items-center p-2 cursor-pointer" onClick={() => navigate('/')}>
           <Home />
           <span className="ml-2">Accueil</span>
         </div>
-        {currentUser && (
+        {user && (
           <>
-            <div className="flex items-center p-2 cursor-pointer" onClick={() => window.location.href = '/profile'}>
+            <div className="flex items-center p-2 cursor-pointer" onClick={() => navigate('/profile')}>
               <User />
               <span className="ml-2">Profil</span>
             </div>
-            <div className="flex items-center p-2 cursor-pointer" onClick={() => window.location.href = '/create'}>
+            <div className="flex items-center p-2 cursor-pointer" onClick={() => navigate('/create')}>
               <Share2 />
               <span className="ml-2">Créer</span>
             </div>
+            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" onClick={handleLogout}>
+              Se déconnecter
+            </button>
           </>
         )}
       </nav>
@@ -37,11 +46,16 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/auth" element={<AuthPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/create" element={<CreatePage />} />
-          <Route path="/preview" element={<PreviewPage />} />
-          <Route path="/test-backend" element={<TestBackend />} /> {/* Ajouter la nouvelle route */}
-          <Route path="*" element={<Navigate to="/" />} />
+          {user ? (
+            <>
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/create" element={<CreatePage />} />
+              <Route path="/preview" element={<PreviewPage />} />
+              <Route path="/test-backend" element={<TestBackend />} />
+            </>
+          ) : (
+            <Route path="*" element={<Navigate to="/auth" />} />
+          )}
         </Routes>
       </main>
     </div>

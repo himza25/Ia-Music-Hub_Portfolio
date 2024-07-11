@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -13,17 +14,22 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post('https://musical-guide-577xxwq64g9fvxwv-5000.app.github.dev/users/login', { email, password });
-      login(response.data.user);
-      navigate('/profile');
+      if (response.data.user) {
+        login(response.data.user);
+        navigate('/profile');
+      } else {
+        setError('Email ou mot de passe incorrect.');
+      }
     } catch (error) {
       console.error('Erreur lors de la connexion', error);
-      alert('Email ou mot de passe incorrect.');
+      setError('Email ou mot de passe incorrect.');
     }
   };
 
   return (
     <div className="bg-white p-4 rounded shadow w-1/3">
       <h2 className="text-xl font-bold mb-4">Connexion</h2>
+      {error && <div className="text-red-500 mb-4">{error}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
