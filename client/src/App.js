@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { Home, User, Share2 } from 'lucide-react';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
@@ -10,35 +10,26 @@ import TestBackend from './components/TestBackend';
 import { useAuth } from './contexts/AuthContext';
 
 const App = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    navigate('/auth');
-  };
+  const { user } = useAuth();
 
   return (
     <div className="flex min-h-screen">
       <nav className="w-64 bg-gray-800 text-white p-4">
         <div className="text-xl font-bold mb-8">IA Music Hub</div>
-        <div className="flex items-center p-2 cursor-pointer" onClick={() => navigate('/')}>
+        <div className="flex items-center p-2 cursor-pointer" onClick={() => window.location.href = '/'}>
           <Home />
           <span className="ml-2">Accueil</span>
         </div>
         {user && (
           <>
-            <div className="flex items-center p-2 cursor-pointer" onClick={() => navigate('/profile')}>
+            <div className="flex items-center p-2 cursor-pointer" onClick={() => window.location.href = '/profile'}>
               <User />
               <span className="ml-2">Profil</span>
             </div>
-            <div className="flex items-center p-2 cursor-pointer" onClick={() => navigate('/create')}>
+            <div className="flex items-center p-2 cursor-pointer" onClick={() => window.location.href = '/create'}>
               <Share2 />
               <span className="ml-2">Créer</span>
             </div>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4" onClick={handleLogout}>
-              Se déconnecter
-            </button>
           </>
         )}
       </nav>
